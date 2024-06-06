@@ -14,20 +14,20 @@ import (
 )
 
 type AnswerServiceImpl struct {
-	AnswerRepository repository.AnswerRepository
-	SurveyRepository repository.SurveyRepository
-	UserRepository   repository.UserRepository
-	DB               *sql.DB
-	Validate         *validator.Validate
+	AnswerRepository   repository.AnswerRepository
+	QuestionRepository repository.QuestionRepository
+	UserRepository     repository.UserRepository
+	DB                 *sql.DB
+	Validate           *validator.Validate
 }
 
-func NewAnswerService(answerRepository repository.AnswerRepository, surveyRepository repository.SurveyRepository, userRepository repository.UserRepository, DB *sql.DB, validate *validator.Validate) AnswerService {
+func NewAnswerService(answerRepository repository.AnswerRepository, questionRepository repository.QuestionRepository, userRepository repository.UserRepository, DB *sql.DB, validate *validator.Validate) AnswerService {
 	return &AnswerServiceImpl{
-		AnswerRepository: answerRepository,
-		SurveyRepository: surveyRepository,
-		UserRepository:   userRepository,
-		DB:               DB,
-		Validate:         validate,
+		AnswerRepository:   answerRepository,
+		QuestionRepository: questionRepository,
+		UserRepository:     userRepository,
+		DB:                 DB,
+		Validate:           validate,
 	}
 }
 
@@ -42,14 +42,14 @@ func (service *AnswerServiceImpl) GetAll(ctx context.Context) []web.AnswerRespon
 }
 
 func (service *AnswerServiceImpl) AddAnswer(ctx context.Context, requests []web.AnswerCreateRequest, userId int) []web.AnswerResponse {
-	surveyIDs := make([]int, len(requests))
+	questionIDs := make([]int, len(requests))
 
 	for i, request := range requests {
 		err := service.Validate.Struct(request)
 		if err != nil {
 			return nil
 		}
-		surveyIDs[i] = request.SurveyId
+		questionIDs[i] = request.QuestionId
 	}
 
 	tx, err := service.DB.Begin()
@@ -65,17 +65,17 @@ func (service *AnswerServiceImpl) AddAnswer(ctx context.Context, requests []web.
 
 	var answerResponses []web.AnswerResponse
 
-	for _, surveyID := range surveyIDs {
-		survey, err := service.SurveyRepository.ShowSurvey(ctx, tx, surveyID)
+	for _, questionID := range questionIDs {
+		question, err := service.QuestionRepository.ShowQuestion(ctx, tx, questionID)
 		if err != nil {
 			panic(err)
 		}
 
 		var answers []domain.Answer
 		for _, request := range requests {
-			if request.SurveyId == surveyID {
+			if request.QuestionId == questionID {
 				answer := domain.Answer{
-					SurveyId:   survey.Id,
+					QuestionId: question.Id,
 					UserId:     user.Id,
 					Answer:     request.Answer,
 					Created_at: time.Now(),

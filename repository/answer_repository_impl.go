@@ -18,9 +18,9 @@ func NewAnswerRepository() AnswerRepository {
 
 func (repository *AnswerRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx) []domain.Answer {
 	SQL := `
-		SELECT a.id, a.survey_id, a.user_id, a.answer, a.created_at, a.updated_at, s.id, s.title, s.question, u.id, u.nim, u.email, u.name
+		SELECT a.id, a.question_id, a.user_id, a.answer, a.created_at, a.updated_at, q.id, q.survey_id, q.question, u.id, u.nim, u.email, u.name
 		FROM answers a
-		JOIN surveys s ON a.survey_id = s.id
+		JOIN questions q ON a.question_id = q.id
 		JOIN users u ON a.user_id = u.id
 	`
 	rows, err := tx.QueryContext(ctx, SQL)
@@ -30,12 +30,12 @@ func (repository *AnswerRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx) 
 	var answers []domain.Answer
 	for rows.Next() {
 		var answer domain.Answer
-		var survey domain.Survey
+		var question domain.Question
 		var user domain.User
 		var createdAt, updatedAt []uint8
 		var nimPtr *string
 
-		err := rows.Scan(&answer.Id, &answer.SurveyId, &answer.UserId, &answer.Answer, &createdAt, &updatedAt, &survey.Id, &survey.Title, &survey.Question, &user.Id, &nimPtr, &user.Email, &user.Name)
+		err := rows.Scan(&answer.Id, &answer.Question, &answer.UserId, &answer.Answer, &createdAt, &updatedAt, &question.Id, &question.SurveyId, &question.Question, &user.Id, &nimPtr, &user.Email, &user.Name)
 		if err != nil {
 			return []domain.Answer{}
 		}
@@ -61,7 +61,7 @@ func (repository *AnswerRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx) 
 			user.NIM = *nimPtr
 		}
 
-		answer.Survey = append(answer.Survey, survey)
+		answer.Question = append(answer.Question, question)
 		answer.User = append(answer.User, user)
 		answers = append(answers, answer)
 	}
@@ -75,12 +75,12 @@ func (repository *AnswerRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx) 
 }
 
 func (repository *AnswerRepositoryImpl) AddAnswer(ctx context.Context, tx *sql.Tx, answers []domain.Answer) ([]domain.Answer, error) {
-	SQL := "INSERT INTO answers(survey_id, user_id, answer, created_at, updated_at) VALUES (?, ?, ?, ?, ?)"
+	SQL := "INSERT INTO answers(question_id, user_id, answer, created_at, updated_at) VALUES (?, ?, ?, ?, ?)"
 
 	var insertedAnswer []domain.Answer
 
 	for _, answer := range answers {
-		result, err := tx.ExecContext(ctx, SQL, answer.SurveyId, answer.UserId, answer.Answer, answer.Created_at, answer.Updated_at)
+		result, err := tx.ExecContext(ctx, SQL, answer.QuestionId, answer.UserId, answer.Answer, answer.Created_at, answer.Updated_at)
 		if err != nil {
 			return nil, err
 		}
@@ -107,24 +107,24 @@ func (repository *AnswerRepositoryImpl) DeleteAnswer(ctx context.Context, tx *sq
 
 func (repository *AnswerRepositoryImpl) ShowAnswer(ctx context.Context, tx *sql.Tx, id int) (domain.Answer, error) {
 	SQL := `
-        SELECT a.id, a.survey_id, a.user_id, a.answer, a.created_at, a.updated_at,
-               s.id AS survey_id, s.title AS survey_title, s.question AS survey_question,
+        SELECT a.id, a.question_id, a.user_id, a.answer, a.created_at, a.updated_at,
+               q.id AS quesiton_id, q.survey_id AS survey_title, q.question AS survey_question,
                u.id AS user_id, u.nim AS user_nim, u.email AS user_email, u.name AS user_name
         FROM answers a
-        JOIN surveys s ON a.survey_id = s.id
+        JOIN questions q ON a.question_id = q.id
         JOIN users u ON a.user_id = u.id
         WHERE a.id = ?
     `
 	rows := tx.QueryRowContext(ctx, SQL, id)
 	var answer domain.Answer
-	var survey domain.Survey
+	var question domain.Question
 	var user domain.User
 
 	var createdAt, updatedAt []uint8
 	var userNIM *string
 
-	err := rows.Scan(&answer.Id, &answer.SurveyId, &answer.UserId, &answer.Answer, &createdAt, &updatedAt,
-		&survey.Id, &survey.Title, &survey.Question, &user.Id, &userNIM, &user.Email, &user.Name)
+	err := rows.Scan(&answer.Id, &answer.QuestionId, &answer.UserId, &answer.Answer, &createdAt, &updatedAt,
+		&question.Id, &question.SurveyId, &question.Question, &user.Id, &userNIM, &user.Email, &user.Name)
 	if err != nil {
 		return domain.Answer{}, err
 	}
@@ -149,7 +149,7 @@ func (repository *AnswerRepositoryImpl) ShowAnswer(ctx context.Context, tx *sql.
 		user.NIM = *userNIM
 	}
 
-	answer.Survey = append(answer.Survey, survey)
+	answer.Question = append(answer.Question, question)
 	answer.User = append(answer.User, user)
 
 	return answer, nil

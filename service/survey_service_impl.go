@@ -47,7 +47,6 @@ func (service *SurveyServiceImpl) AddSurvey(ctx context.Context, requests []web.
 	for _, request := range requests {
 		survey := domain.Survey{
 			Title:      request.Title,
-			Question:   request.Question,
 			Created_at: time.Now(),
 			Updated_at: time.Now(),
 		}
@@ -84,7 +83,6 @@ func (service *SurveyServiceImpl) UpdateSurvey(ctx context.Context, request web.
 
 	survey.Id = request.Id
 	survey.Title = request.Title
-	survey.Question = request.Question
 	survey.Updated_at = time.Now()
 
 	survey = service.SurveyRepository.UpdateSurvey(ctx, tx, survey)

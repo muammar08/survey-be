@@ -2,9 +2,11 @@ package domain
 
 import "time"
 
-type Survey struct {
+type Question struct {
 	Id         int
-	Title      string
+	SurveyId   int
+	Question   string
+	Survey     []Survey
 	Created_at time.Time
 	Updated_at time.Time
 }

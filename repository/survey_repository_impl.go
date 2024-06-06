@@ -16,12 +16,12 @@ func NewSurveyRepository() SurveyRepository {
 }
 
 func (repository *SurveyRepositoryImpl) AddSurvey(ctx context.Context, tx *sql.Tx, surveys []domain.Survey) ([]domain.Survey, error) {
-	SQL := "INSERT INTO surveys(title, question, created_at, updated_at) VALUES (?, ?, ?, ?)"
+	SQL := "INSERT INTO surveys(title, created_at, updated_at) VALUES (?, ?, ?, ?)"
 
 	var insertedSurveys []domain.Survey
 
 	for _, survey := range surveys {
-		result, err := tx.ExecContext(ctx, SQL, survey.Title, survey.Question, survey.Created_at, survey.Updated_at)
+		result, err := tx.ExecContext(ctx, SQL, survey.Title, survey.Created_at, survey.Updated_at)
 		if err != nil {
 			return nil, err
 		}
@@ -39,8 +39,8 @@ func (repository *SurveyRepositoryImpl) AddSurvey(ctx context.Context, tx *sql.T
 }
 
 func (repository *SurveyRepositoryImpl) UpdateSurvey(ctx context.Context, tx *sql.Tx, survey domain.Survey) domain.Survey {
-	SQL := "UPDATE surveys SET title = ?, question = ?, updated_at = ? WHERE id = ?"
-	_, err := tx.ExecContext(ctx, SQL, survey.Title, survey.Question, survey.Updated_at, survey.Id)
+	SQL := "UPDATE surveys SET title = ?, updated_at = ? WHERE id = ?"
+	_, err := tx.ExecContext(ctx, SQL, survey.Title, survey.Updated_at, survey.Id)
 	helper.PanicIfError(err)
 
 	return survey
@@ -61,7 +61,7 @@ func (repository *SurveyRepositoryImpl) ShowSurvey(ctx context.Context, tx *sql.
 
 	var createdAt, updatedAt []uint8
 
-	err := rows.Scan(&survey.Id, &survey.Title, &survey.Question, &createdAt, &updatedAt)
+	err := rows.Scan(&survey.Id, &survey.Title, &createdAt, &updatedAt)
 	if err != nil {
 		return domain.Survey{}, err
 	}
@@ -95,7 +95,7 @@ func (repository *SurveyRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx) 
 	for rows.Next() {
 		var survey domain.Survey
 		var createdAt, updatedAt []uint8
-		err := rows.Scan(&survey.Id, &survey.Title, &survey.Question, &createdAt, &updatedAt)
+		err := rows.Scan(&survey.Id, &survey.Title, &createdAt, &updatedAt)
 		if err != nil {
 			//fmt.Println("Error scanning row:", err)
 			return []domain.Survey{}

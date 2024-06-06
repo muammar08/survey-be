@@ -28,11 +28,15 @@ func main() {
 	surveyService := service.NewSurveyService(surveyRepository, db, validate)
 	surveyController := controller.NewSurveyController(surveyService)
 
+	questionRepository := repository.NewQuestionRepository()
+	questionService := service.NewQuestionService(questionRepository, surveyRepository, db, validate)
+	questionController := controller.NewQuestionController(questionService)
+
 	answerRepository := repository.NewAnswerRepository()
-	answerService := service.NewAnswerService(answerRepository, surveyRepository, userRepository, db, validate)
+	answerService := service.NewAnswerService(answerRepository, questionRepository, userRepository, db, validate)
 	answerController := controller.NewAnswerController(answerService)
 
-	router := app.NewRouter(userController, surveyController, answerController)
+	router := app.NewRouter(userController, surveyController, questionController, answerController)
 
 	corsHandler := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"}, // Adjust the allowed origins according to your needs
