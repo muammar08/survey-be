@@ -15,27 +15,17 @@ func NewSurveyRepository() SurveyRepository {
 	return &SurveyRepositoryImpl{}
 }
 
-func (repository *SurveyRepositoryImpl) AddSurvey(ctx context.Context, tx *sql.Tx, surveys []domain.Survey) ([]domain.Survey, error) {
-	SQL := "INSERT INTO surveys(title, created_at, updated_at) VALUES (?, ?, ?, ?)"
+func (repository *SurveyRepositoryImpl) AddSurvey(ctx context.Context, tx *sql.Tx, survey domain.Survey) domain.Survey {
+	SQL := "INSERT INTO surveys(title, created_at, updated_at) VALUES (?, ?, ?)"
+	result, err := tx.ExecContext(ctx, SQL, survey.Title, survey.Created_at, survey.Updated_at)
+	helper.PanicIfError(err)
 
-	var insertedSurveys []domain.Survey
+	id, err := result.LastInsertId()
+	helper.PanicIfError(err)
 
-	for _, survey := range surveys {
-		result, err := tx.ExecContext(ctx, SQL, survey.Title, survey.Created_at, survey.Updated_at)
-		if err != nil {
-			return nil, err
-		}
+	survey.Id = int(id)
 
-		id, err := result.LastInsertId()
-		if err != nil {
-			return nil, err
-		}
-
-		survey.Id = int(id)
-		insertedSurveys = append(insertedSurveys, survey)
-	}
-
-	return insertedSurveys, nil
+	return survey
 }
 
 func (repository *SurveyRepositoryImpl) UpdateSurvey(ctx context.Context, tx *sql.Tx, survey domain.Survey) domain.Survey {

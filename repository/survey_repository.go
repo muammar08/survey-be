@@ -7,7 +7,7 @@ import (
 )
 
 type SurveyRepository interface {
-	AddSurvey(ctx context.Context, tx *sql.Tx, survey []domain.Survey) ([]domain.Survey, error)
+	AddSurvey(ctx context.Context, tx *sql.Tx, survey domain.Survey) domain.Survey
 	UpdateSurvey(ctx context.Context, tx *sql.Tx, survey domain.Survey) domain.Survey
 	DeleteSurvey(ctx context.Context, tx *sql.Tx, survey domain.Survey) domain.Survey
 	ShowSurvey(ctx context.Context, tx *sql.Tx, id int) (domain.Survey, error)

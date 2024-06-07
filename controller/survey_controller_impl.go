@@ -22,7 +22,7 @@ func NewSurveyController(surveyService service.SurveyService) SurveyController {
 
 func (controller *SurveyControllerImpl) AddSurvey(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	//surveyCreateRequest := web.SurveyCreateRequest{}
-	var surveyCreateRequest []web.SurveyCreateRequest
+	var surveyCreateRequest web.SurveyCreateRequest
 	helper.ReadFromRequestBody(request, &surveyCreateRequest)
 
 	surveyResponse := controller.SurveyService.AddSurvey(request.Context(), surveyCreateRequest)

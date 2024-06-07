@@ -27,45 +27,23 @@ func NewSurveyService(surveyRepository repository.SurveyRepository, DB *sql.DB, 
 	}
 }
 
-func (service *SurveyServiceImpl) AddSurvey(ctx context.Context, requests []web.SurveyCreateRequest) []web.SurveyResponse {
-	for _, request := range requests {
-		err := service.Validate.Struct(request)
-		if err != nil {
-			// handle validation error for the current struct
-			return nil
-		}
-	}
+func (service *SurveyServiceImpl) AddSurvey(ctx context.Context, request web.SurveyCreateRequest) web.SurveyResponse {
+	err := service.Validate.Struct(request)
+	helper.PanicIfError(err)
 
 	tx, err := service.DB.Begin()
-	if err != nil {
-		// handle error
-		return nil
-	}
+	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(tx)
 
-	var surveys []domain.Survey
-	for _, request := range requests {
-		survey := domain.Survey{
-			Title:      request.Title,
-			Created_at: time.Now(),
-			Updated_at: time.Now(),
-		}
-		surveys = append(surveys, survey)
+	survey := domain.Survey{
+		Title:      request.Title,
+		Created_at: time.Now(),
+		Updated_at: time.Now(),
 	}
 
-	insertedSurveys, err := service.SurveyRepository.AddSurvey(ctx, tx, surveys)
-	if err != nil {
-		// handle error
-		return nil
-	}
+	survey = service.SurveyRepository.AddSurvey(ctx, tx, survey)
 
-	var surveyResponses []web.SurveyResponse
-	for _, survey := range insertedSurveys {
-		surveyResponse := helper.ToSurveyResponse(survey)
-		surveyResponses = append(surveyResponses, surveyResponse)
-	}
-
-	return surveyResponses
+	return helper.ToSurveyResponse(survey)
 }
 
 func (service *SurveyServiceImpl) UpdateSurvey(ctx context.Context, request web.SurveyUpdateRequest) web.SurveyResponse {
