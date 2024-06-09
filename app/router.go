@@ -39,7 +39,7 @@ func NewRouter(
 	router.DELETE("/api/question/:questionId", questionController.DeleteQuestion)
 
 	//Answer
-	router.GET("/api/answer", authMiddleware.ApplyMiddleware(answerController.GetAll))
+	router.GET("/api/answer", answerController.GetAll)
 	router.GET("/api/answer/:answerId", authMiddleware.ApplyMiddleware(answerController.ShowAnswer))
 	router.POST("/api/answer", authMiddleware.ApplyMiddleware(answerController.AddAnswer))
 	router.DELETE("/api/answer/:answerId", authMiddleware.ApplyMiddleware(surveyController.DeleteSurvey))

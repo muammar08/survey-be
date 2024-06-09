@@ -18,11 +18,11 @@ func NewAnswerRepository() AnswerRepository {
 
 func (repository *AnswerRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx) []domain.Answer {
 	SQL := `
-		SELECT a.id, a.question_id, a.user_id, a.answer, a.created_at, a.updated_at, q.id, q.survey_id, q.question, u.id, u.nim, u.email, u.name
-		FROM answers a
-		JOIN questions q ON a.question_id = q.id
-		JOIN users u ON a.user_id = u.id
-	`
+        SELECT a.id, a.question_id, a.user_id, a.answer, a.created_at, a.updated_at, q.id, q.survey_id, q.question, u.id, u.nim, u.email, u.name
+        FROM answers a
+        JOIN questions q ON a.question_id = q.id
+        JOIN users u ON a.user_id = u.id
+    `
 	rows, err := tx.QueryContext(ctx, SQL)
 	helper.PanicIfError(err)
 	defer rows.Close()
@@ -34,11 +34,10 @@ func (repository *AnswerRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx) 
 		var user domain.User
 		var createdAt, updatedAt []uint8
 		var nimPtr *string
+		var questionID int // Add a separate variable for question_id
 
-		err := rows.Scan(&answer.Id, &answer.Question, &answer.UserId, &answer.Answer, &createdAt, &updatedAt, &question.Id, &question.SurveyId, &question.Question, &user.Id, &nimPtr, &user.Email, &user.Name)
-		if err != nil {
-			return []domain.Answer{}
-		}
+		err := rows.Scan(&answer.Id, &questionID, &answer.UserId, &answer.Answer, &createdAt, &updatedAt, &question.Id, &question.SurveyId, &question.Question, &user.Id, &nimPtr, &user.Email, &user.Name)
+		helper.PanicIfError(err)
 
 		createdAtStr := string(createdAt)
 		updatedAtStr := string(updatedAt)
@@ -65,6 +64,7 @@ func (repository *AnswerRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx) 
 		answer.User = append(answer.User, user)
 		answers = append(answers, answer)
 	}
+	fmt.Println(answers)
 
 	if err = rows.Err(); err != nil {
 		fmt.Println("Error in rows:", err)
