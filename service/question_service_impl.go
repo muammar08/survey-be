@@ -71,6 +71,7 @@ func (service *QuestionServiceImpl) AddQuestion(ctx context.Context, requests []
 			question := domain.Question{
 				SurveyId:   survey.Id,
 				Question:   request.Question,
+				Type:       request.Type,
 				Created_at: time.Now(),
 				Updated_at: time.Now(),
 			}
@@ -108,6 +109,7 @@ func (service *QuestionServiceImpl) UpdateQuestion(ctx context.Context, request 
 		{
 			Id:         request.Id,
 			Question:   request.Question,
+			Type:       request.Type,
 			Updated_at: time.Now(),
 		},
 	}

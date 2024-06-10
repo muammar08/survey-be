@@ -31,6 +31,7 @@ func ToQuestionResponse(question domain.Question) web.QuestionResponse {
 		Id:         question.Id,
 		SurveyId:   question.SurveyId,
 		Question:   question.Question,
+		Type:       question.Type,
 		Survey:     ToSurveyResponses(question.Survey),
 		Created_at: question.Created_at,
 		Updated_at: question.Updated_at,

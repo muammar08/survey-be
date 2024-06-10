@@ -67,12 +67,12 @@ func (repository *QuestionRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx
 }
 
 func (repository *QuestionRepositoryImpl) AddQuestion(ctx context.Context, tx *sql.Tx, questions []domain.Question) ([]domain.Question, error) {
-	SQL := "INSERT INTO questions(survey_id, question, created_at, updated_at) VALUES (?, ?, ?, ?)"
+	SQL := "INSERT INTO questions(survey_id, question, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)"
 
 	var insertedQuestion []domain.Question
 
 	for _, question := range questions {
-		result, err := tx.ExecContext(ctx, SQL, question.SurveyId, question.Question, question.Created_at, question.Updated_at)
+		result, err := tx.ExecContext(ctx, SQL, question.SurveyId, question.Question, question.Type, question.Created_at, question.Updated_at)
 		if err != nil {
 			return nil, err
 		}
@@ -90,7 +90,7 @@ func (repository *QuestionRepositoryImpl) AddQuestion(ctx context.Context, tx *s
 }
 
 func (repository *QuestionRepositoryImpl) UpdateQuestion(ctx context.Context, tx *sql.Tx, questions []domain.Question) ([]domain.Question, error) {
-	SQL := "UPDATE questions SET question = ?, updated_at = ? where id = ?"
+	SQL := "UPDATE questions SET question = ?, type = ?, updated_at = ? where id = ?"
 
 	var updateQuestion []domain.Question
 
@@ -116,7 +116,7 @@ func (repository *QuestionRepositoryImpl) DeleteQuestion(ctx context.Context, tx
 
 func (repository *QuestionRepositoryImpl) ShowQuestion(ctx context.Context, tx *sql.Tx, id int) (domain.Question, error) {
 	SQL := `
-		SELECT q.id, q.survey_id, q.question, q.created_at, q.updated_at, s.id, s.title
+		SELECT q.id, q.survey_id, q.question, q.type, q.created_at, q.updated_at, s.id, s.title
 		FROM questions q
 		JOIN surveys s ON q.survey_id = s.id
 		WHERE q.id = ?
