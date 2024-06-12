@@ -34,9 +34,8 @@ func (repository *AnswerRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx) 
 		var user domain.User
 		var createdAt, updatedAt []uint8
 		var nimPtr *string
-		var questionID int // Add a separate variable for question_id
 
-		err := rows.Scan(&answer.Id, &questionID, &answer.UserId, &answer.Answer, &createdAt, &updatedAt, &question.Id, &question.SurveyId, &question.Question, &question.Type, &user.Id, &nimPtr, &user.Email, &user.Name)
+		err := rows.Scan(&answer.Id, &answer.QuestionId, &answer.UserId, &answer.Answer, &createdAt, &updatedAt, &question.Id, &question.SurveyId, &question.Question, &question.Type, &user.Id, &nimPtr, &user.Email, &user.Name)
 		helper.PanicIfError(err)
 
 		createdAtStr := string(createdAt)
