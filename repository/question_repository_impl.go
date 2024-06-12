@@ -126,7 +126,7 @@ func (repository *QuestionRepositoryImpl) ShowQuestion(ctx context.Context, tx *
 	var survey domain.Survey
 	var createdAt, updatedAt []uint8
 
-	err := rows.Scan(&question.Id, &question.SurveyId, &question.Question, &createdAt, &updatedAt, &survey.Id, &survey.Title)
+	err := rows.Scan(&question.Id, &question.SurveyId, &question.Question, &question.Type, &createdAt, &updatedAt, &survey.Id, &survey.Title)
 	if err != nil {
 		return domain.Question{}, err
 	}
