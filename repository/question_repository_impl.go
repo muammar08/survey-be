@@ -18,7 +18,7 @@ func NewQuestionRepository() QuestionRepository {
 
 func (repository *QuestionRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx) []domain.Question {
 	SQL := `
-		SELECT q.id, q.survey_id, q.question, q.created_at, q.updated_at, s.id, s.title
+		SELECT q.id, q.survey_id, q.question, q.type, q.created_at, q.updated_at, s.id, s.title
 		FROM questions q
 		JOIN surveys s ON q.survey_id = s.id
 	`
@@ -32,7 +32,7 @@ func (repository *QuestionRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx
 		var survey domain.Survey
 		var createdAt, updatedAt []uint8
 
-		err := rows.Scan(&question.Id, &question.SurveyId, &question.Question, &createdAt, &updatedAt, &survey.Id, &survey.Title)
+		err := rows.Scan(&question.Id, &question.SurveyId, &question.Question, &question.Type, &createdAt, &updatedAt, &survey.Id, &survey.Title)
 		if err != nil {
 			return []domain.Question{}
 		}
