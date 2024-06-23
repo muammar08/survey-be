@@ -145,3 +145,16 @@ func (service *QuestionServiceImpl) ShowQuestion(ctx context.Context, id int) we
 
 	return helper.ToQuestionResponse(question)
 }
+
+func (service *QuestionServiceImpl) AnswerQuestion(ctx context.Context, id int) web.AnswerQuestion {
+	tx, err := service.DB.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollback(tx)
+
+	question, err := service.QuestionRepository.AnswerQuestion(ctx, tx, id)
+	if err != nil {
+		panic(exception.NewNotFoundError(err.Error()))
+	}
+
+	return helper.ToAnswerQuestionResponse(question)
+}

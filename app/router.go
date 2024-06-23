@@ -27,7 +27,6 @@ func NewRouter(
 	//Survey
 	router.GET("/api/survey", authMiddleware.ApplyAdminMiddleware(surveyController.GetAll))
 	router.GET("/api/survey/:surveyId", authMiddleware.ApplyAdminMiddleware(surveyController.ShowSurvey))
-	router.GET("/api/allanswer/:surveyId", surveyController.AllAnswer)
 	router.POST("/api/survey", surveyController.AddSurvey)
 	router.PUT("/api/survey/:surveyId", authMiddleware.ApplyAdminMiddleware(surveyController.UpdateSurvey))
 	router.DELETE("/api/survey/:surveyId", authMiddleware.ApplyAdminMiddleware(surveyController.DeleteSurvey))
@@ -35,13 +34,14 @@ func NewRouter(
 	//Question
 	router.GET("/api/question", questionController.GetAll)
 	router.GET("/api/question/:questionId", questionController.ShowQuestion)
+	router.GET("/api/questions/:questionId", questionController.AnswerQuestion)
 	router.POST("/api/question", questionController.AddQuestion)
 	router.PUT("/api/question/:questionId", questionController.UpdateQuestion)
 	router.DELETE("/api/question/:questionId", questionController.DeleteQuestion)
 
 	//Answer
 	router.GET("/api/answer", answerController.GetAll)
-	router.GET("/api/answer/:answerId", authMiddleware.ApplyMiddleware(answerController.ShowAnswer))
+	router.GET("/api/answer/:answerId", answerController.ShowAnswer)
 	router.POST("/api/answer", authMiddleware.ApplyMiddleware(answerController.AddAnswer))
 	router.DELETE("/api/answer/:answerId", authMiddleware.ApplyMiddleware(surveyController.DeleteSurvey))
 

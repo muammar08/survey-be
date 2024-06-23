@@ -151,3 +151,48 @@ func (repository *QuestionRepositoryImpl) ShowQuestion(ctx context.Context, tx *
 
 	return question, nil
 }
+
+func (repository *QuestionRepositoryImpl) AnswerQuestion(ctx context.Context, tx *sql.Tx, id int) (domain.AnswerQuestion, error) {
+	SQL := `
+		SELECT q.id, q.survey_id, q.question, q.type, 
+		       a.id, a.question_id, a.user_id, a.answer, 
+		       u.id, u.email, u.name
+		FROM questions q
+		JOIN answers a ON q.id = a.question_id
+		JOIN users u ON a.user_id = u.id
+		WHERE q.id = ?
+	`
+
+	rows, err := tx.QueryContext(ctx, SQL, id)
+	if err != nil {
+		return domain.AnswerQuestion{}, err
+	}
+	defer rows.Close()
+
+	var question domain.AnswerQuestion
+	question.Answer = make([]domain.Answer, 0)
+
+	answerMap := make(map[int]domain.Answer)
+
+	for rows.Next() {
+		var answer domain.Answer
+		var user domain.User
+
+		err := rows.Scan(&question.Id, &question.SurveyId, &question.Question, &question.Type,
+			&answer.Id, &answer.QuestionId, &answer.UserId, &answer.Answer,
+			&user.Id, &user.Email, &user.Name)
+
+		if err != nil {
+			fmt.Println("err", err)
+		}
+
+		answer.User = append(answer.User, user)
+		answerMap[answer.Id] = answer
+	}
+
+	for _, answer := range answerMap {
+		question.Answer = append(question.Answer, answer)
+	}
+
+	return question, nil
+}

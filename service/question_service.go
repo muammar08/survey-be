@@ -10,5 +10,6 @@ type QuestionService interface {
 	UpdateQuestion(ctx context.Context, request web.QuestionUpdateRequest) web.QuestionResponse
 	DeleteQuestion(ctx context.Context, id int)
 	ShowQuestion(ctx context.Context, id int) web.QuestionResponse
+	AnswerQuestion(ctx context.Context, id int) web.AnswerQuestion
 	GetAll(ctx context.Context) []web.QuestionResponse
 }

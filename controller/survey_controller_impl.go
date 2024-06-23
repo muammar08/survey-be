@@ -94,18 +94,3 @@ func (controller *SurveyControllerImpl) GetAll(writer http.ResponseWriter, reque
 
 	helper.WriteToResponseBody(writer, webResponse)
 }
-
-func (controller *SurveyControllerImpl) AllAnswer(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	surveyId := params.ByName("surveyId")
-	id, err := strconv.Atoi(surveyId)
-	helper.PanicIfError(err)
-
-	surveyResponse := controller.SurveyService.AllAnswer(request.Context(), id)
-	webResponse := web.WebResponse{
-		Code:   200,
-		Status: "OK",
-		Data:   surveyResponse,
-	}
-
-	helper.WriteToResponseBody(writer, webResponse)
-}

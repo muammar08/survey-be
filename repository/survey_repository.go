@@ -11,6 +11,5 @@ type SurveyRepository interface {
 	UpdateSurvey(ctx context.Context, tx *sql.Tx, survey domain.Survey) domain.Survey
 	DeleteSurvey(ctx context.Context, tx *sql.Tx, survey domain.Survey) domain.Survey
 	ShowSurvey(ctx context.Context, tx *sql.Tx, id int) (domain.Survey, error)
-	AllAnswer(ctx context.Context, tx *sql.Tx, id int) (domain.AllAnswer, error)
 	GetAll(ctx context.Context, tx *sql.Tx) []domain.Survey
 }

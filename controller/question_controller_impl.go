@@ -89,3 +89,17 @@ func (controller *QuestionControllerImpl) GetAll(writer http.ResponseWriter, req
 
 	helper.WriteToResponseBody(writer, webResponse)
 }
+
+func (controller *QuestionControllerImpl) AnswerQuestion(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	questionId, err := strconv.Atoi(params.ByName("questionId"))
+	helper.PanicIfError(err)
+
+	questionResponse := controller.QuestionService.AnswerQuestion(request.Context(), questionId)
+	webResponse := web.WebResponse{
+		Code:   200,
+		Status: "OK",
+		Data:   questionResponse,
+	}
+
+	helper.WriteToResponseBody(writer, webResponse)
+}

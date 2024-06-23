@@ -11,6 +11,5 @@ type SurveyController interface {
 	UpdateSurvey(writer http.ResponseWriter, request *http.Request, params httprouter.Params)
 	DeleteSurvey(writer http.ResponseWriter, request *http.Request, params httprouter.Params)
 	ShowSurvey(writer http.ResponseWriter, request *http.Request, params httprouter.Params)
-	AllAnswer(writer http.ResponseWriter, request *http.Request, params httprouter.Params)
 	GetAll(writer http.ResponseWriter, request *http.Request, params httprouter.Params)
 }

@@ -8,10 +8,3 @@ type Survey struct {
 	Created_at time.Time
 	Updated_at time.Time
 }
-
-type AllAnswer struct {
-	Id       int
-	Title    string
-	Question []Question
-	Answer   []Answer
-}
