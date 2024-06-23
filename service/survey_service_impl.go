@@ -103,3 +103,16 @@ func (service *SurveyServiceImpl) GetAll(ctx context.Context) []web.SurveyRespon
 
 	return helper.ToSurveyResponses(surveys)
 }
+
+func (service *SurveyServiceImpl) AllAnswer(ctx context.Context, id int) web.AllAnswerResponse {
+	tx, err := service.DB.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollback(tx)
+
+	survey, err := service.SurveyRepository.AllAnswer(ctx, tx, id)
+	if err != nil {
+		panic(exception.NewNotFoundError(err.Error()))
+	}
+
+	return helper.ToAllAnswerResponse(survey)
+}

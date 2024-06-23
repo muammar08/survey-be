@@ -106,7 +106,7 @@ func (repository *AnswerRepositoryImpl) DeleteAnswer(ctx context.Context, tx *sq
 func (repository *AnswerRepositoryImpl) ShowAnswer(ctx context.Context, tx *sql.Tx, id int) (domain.Answer, error) {
 	SQL := `
         SELECT a.id, a.question_id, a.user_id, a.answer, a.created_at, a.updated_at,
-               q.id AS quesiton_id, q.survey_id AS survey_title, q.question AS survey_question,
+               q.id AS quesiton_id, q.survey_id AS survey_title, q.question AS survey_question, q.type
                u.id AS user_id, u.nim AS user_nim, u.email AS user_email, u.name AS user_name
         FROM answers a
         JOIN questions q ON a.question_id = q.id
@@ -122,7 +122,7 @@ func (repository *AnswerRepositoryImpl) ShowAnswer(ctx context.Context, tx *sql.
 	var userNIM *string
 
 	err := rows.Scan(&answer.Id, &answer.QuestionId, &answer.UserId, &answer.Answer, &createdAt, &updatedAt,
-		&question.Id, &question.SurveyId, &question.Question, &user.Id, &userNIM, &user.Email, &user.Name)
+		&question.Id, &question.SurveyId, &question.Question, &question.Type, &user.Id, &userNIM, &user.Email, &user.Name)
 	if err != nil {
 		return domain.Answer{}, err
 	}

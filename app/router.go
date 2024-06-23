@@ -27,6 +27,7 @@ func NewRouter(
 	//Survey
 	router.GET("/api/survey", authMiddleware.ApplyAdminMiddleware(surveyController.GetAll))
 	router.GET("/api/survey/:surveyId", authMiddleware.ApplyAdminMiddleware(surveyController.ShowSurvey))
+	router.GET("/api/allanswer/:surveyId", surveyController.AllAnswer)
 	router.POST("/api/survey", surveyController.AddSurvey)
 	router.PUT("/api/survey/:surveyId", authMiddleware.ApplyAdminMiddleware(surveyController.UpdateSurvey))
 	router.DELETE("/api/survey/:surveyId", authMiddleware.ApplyAdminMiddleware(surveyController.DeleteSurvey))

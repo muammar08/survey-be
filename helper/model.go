@@ -26,6 +26,15 @@ func ToSurveyResponse(survey domain.Survey) web.SurveyResponse {
 	}
 }
 
+func ToAllAnswerResponse(survey domain.AllAnswer) web.AllAnswerResponse {
+	return web.AllAnswerResponse{
+		Id:       survey.Id,
+		Title:    survey.Title,
+		Question: ToQuestionResponses(survey.Question),
+		Answer:   ToAnswerResponses(survey.Answer),
+	}
+}
+
 func ToQuestionResponse(question domain.Question) web.QuestionResponse {
 	return web.QuestionResponse{
 		Id:         question.Id,

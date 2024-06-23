@@ -10,5 +10,6 @@ type SurveyService interface {
 	UpdateSurvey(ctx context.Context, request web.SurveyUpdateRequest) web.SurveyResponse
 	DeleteSurvey(ctx context.Context, id int)
 	ShowSurvey(ctx context.Context, id int) web.SurveyResponse
+	AllAnswer(ctx context.Context, id int) web.AllAnswerResponse
 	GetAll(ctx context.Context) []web.SurveyResponse
 }
