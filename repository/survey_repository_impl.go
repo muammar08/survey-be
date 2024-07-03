@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"project-workshop/go-api-ecom/helper"
 	"project-workshop/go-api-ecom/model/domain"
 	"time"
@@ -16,8 +17,8 @@ func NewSurveyRepository() SurveyRepository {
 }
 
 func (repository *SurveyRepositoryImpl) AddSurvey(ctx context.Context, tx *sql.Tx, survey domain.Survey) domain.Survey {
-	SQL := "INSERT INTO surveys(title, created_at, updated_at) VALUES (?, ?, ?)"
-	result, err := tx.ExecContext(ctx, SQL, survey.Title, survey.Created_at, survey.Updated_at)
+	SQL := "INSERT INTO surveys(title, tanggal_posting, batas_posting, created_at, updated_at) VALUES (?, ?, ?, ?, ?)"
+	result, err := tx.ExecContext(ctx, SQL, survey.Title, survey.TanggalPosting, survey.BatasPosting, survey.Created_at, survey.Updated_at)
 	helper.PanicIfError(err)
 
 	id, err := result.LastInsertId()
@@ -29,8 +30,8 @@ func (repository *SurveyRepositoryImpl) AddSurvey(ctx context.Context, tx *sql.T
 }
 
 func (repository *SurveyRepositoryImpl) UpdateSurvey(ctx context.Context, tx *sql.Tx, survey domain.Survey) domain.Survey {
-	SQL := "UPDATE surveys SET title = ?, updated_at = ? WHERE id = ?"
-	_, err := tx.ExecContext(ctx, SQL, survey.Title, survey.Updated_at, survey.Id)
+	SQL := "UPDATE surveys SET title = ?, tanggal_posting = ?, batas_posting = ?, updated_at = ? WHERE id = ?"
+	_, err := tx.ExecContext(ctx, SQL, survey.Title, survey.TanggalPosting, survey.BatasPosting, survey.Updated_at, survey.Id)
 	helper.PanicIfError(err)
 
 	return survey
@@ -51,7 +52,7 @@ func (repository *SurveyRepositoryImpl) ShowSurvey(ctx context.Context, tx *sql.
 
 	var createdAt, updatedAt []uint8
 
-	err := rows.Scan(&survey.Id, &survey.Title, &createdAt, &updatedAt)
+	err := rows.Scan(&survey.Id, &survey.Title, &survey.TanggalPosting, &survey.BatasPosting, &createdAt, &updatedAt)
 	if err != nil {
 		return domain.Survey{}, err
 	}
@@ -84,10 +85,10 @@ func (repository *SurveyRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx) 
 	var surveys []domain.Survey
 	for rows.Next() {
 		var survey domain.Survey
-		var createdAt, updatedAt []uint8
-		err := rows.Scan(&survey.Id, &survey.Title, &createdAt, &updatedAt)
+		var createdAt, updatedAt string
+		err := rows.Scan(&survey.Id, &survey.Title, &survey.TanggalPosting, &survey.BatasPosting, &createdAt, &updatedAt)
 		if err != nil {
-			//fmt.Println("Error scanning row:", err)
+			fmt.Println("Error scanning row:", err)
 			return []domain.Survey{}
 		}
 
@@ -96,12 +97,12 @@ func (repository *SurveyRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx) 
 		layout := "2006-01-02 15:04:05"
 		createdAtTime, err := time.Parse(layout, createdAtStr)
 		if err != nil {
-			//fmt.Println("Error parsing created_at:", err)
+			fmt.Println("Error parsing created_at:", err)
 			return []domain.Survey{}
 		}
 		updatedAtTime, err := time.Parse(layout, updatedAtStr)
 		if err != nil {
-			//fmt.Println("Error parsing updated_at:", err)
+			fmt.Println("Error parsing updated_at:", err)
 			return []domain.Survey{}
 		}
 

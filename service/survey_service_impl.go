@@ -36,9 +36,11 @@ func (service *SurveyServiceImpl) AddSurvey(ctx context.Context, request web.Sur
 	defer helper.CommitOrRollback(tx)
 
 	survey := domain.Survey{
-		Title:      request.Title,
-		Created_at: time.Now(),
-		Updated_at: time.Now(),
+		Title:          request.Title,
+		TanggalPosting: request.TanggalPosting,
+		BatasPosting:   request.BatasPosting,
+		Created_at:     time.Now(),
+		Updated_at:     time.Now(),
 	}
 
 	survey = service.SurveyRepository.AddSurvey(ctx, tx, survey)
@@ -61,6 +63,8 @@ func (service *SurveyServiceImpl) UpdateSurvey(ctx context.Context, request web.
 
 	survey.Id = request.Id
 	survey.Title = request.Title
+	survey.TanggalPosting = request.TanggalPosting
+	survey.BatasPosting = request.BatasPosting
 	survey.Updated_at = time.Now()
 
 	survey = service.SurveyRepository.UpdateSurvey(ctx, tx, survey)

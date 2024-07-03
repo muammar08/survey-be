@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"project-workshop/go-api-ecom/helper"
 	"project-workshop/go-api-ecom/model/domain"
 )
 
@@ -120,16 +121,17 @@ func (repository *UserRepositoryImpl) FindByRole(ctx context.Context, tx *sql.Tx
 func (repository *UserRepositoryImpl) FindByUsername(ctx context.Context, tx *sql.Tx, nim string, email string) (domain.User, error) {
 	SQL := "SELECT id, nim, email, name, password, role FROM users WHERE nim = ? OR email = ?"
 	rows, err := tx.QueryContext(ctx, SQL, nim, email)
-	if err != nil {
-		panic(err)
-	}
+	helper.PanicIfError(err)
 	defer rows.Close()
+
+	var userNIM *string
 
 	user := domain.User{}
 	if rows.Next() {
-		err := rows.Scan(&user.Id, &user.NIM, &user.Email, &user.Name, &user.Password, &user.Role)
-		if err != nil {
-			panic(err)
+		err := rows.Scan(&user.Id, &userNIM, &user.Email, &user.Name, &user.Password, &user.Role)
+		helper.PanicIfError(err)
+		if userNIM != nil {
+			user.NIM = *userNIM
 		}
 		return user, nil
 	} else {
@@ -140,17 +142,13 @@ func (repository *UserRepositoryImpl) FindByUsername(ctx context.Context, tx *sq
 func (repository *UserRepositoryImpl) FindByUsernamePublic(ctx context.Context, tx *sql.Tx, email string) (domain.User, error) {
 	SQL := "SELECT id, email, name, password, role FROM users WHERE email = ?"
 	rows, err := tx.QueryContext(ctx, SQL, email)
-	if err != nil {
-		panic(err)
-	}
+	helper.PanicIfError(err)
 	defer rows.Close()
 
 	user := domain.User{}
 	if rows.Next() {
 		err := rows.Scan(&user.Id, &user.Email, &user.Name, &user.Password, &user.Role)
-		if err != nil {
-			panic(err)
-		}
+		helper.PanicIfError(err)
 		return user, nil
 	} else {
 		return user, err

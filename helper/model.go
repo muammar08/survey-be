@@ -19,10 +19,12 @@ func ToUserResponse(user domain.User) web.UserResponse {
 
 func ToSurveyResponse(survey domain.Survey) web.SurveyResponse {
 	return web.SurveyResponse{
-		Id:         survey.Id,
-		Title:      survey.Title,
-		Created_at: survey.Created_at,
-		Updated_at: survey.Updated_at,
+		Id:             survey.Id,
+		Title:          survey.Title,
+		TanggalPosting: survey.TanggalPosting,
+		BatasPosting:   survey.BatasPosting,
+		Created_at:     survey.Created_at,
+		Updated_at:     survey.Updated_at,
 	}
 }
 
