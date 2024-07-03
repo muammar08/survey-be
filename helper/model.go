@@ -1,8 +1,8 @@
 package helper
 
 import (
-	"project-workshop/go-api-ecom/model/domain"
-	"project-workshop/go-api-ecom/model/web"
+	"survey/model/domain"
+	"survey/model/web"
 	// "strconv"
 )
 

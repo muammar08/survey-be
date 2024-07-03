@@ -1,4 +1,4 @@
-module project-workshop/go-api-ecom
+module survey
 
 go 1.16
 

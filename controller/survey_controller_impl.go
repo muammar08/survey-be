@@ -2,10 +2,10 @@ package controller
 
 import (
 	"net/http"
-	"project-workshop/go-api-ecom/helper"
-	"project-workshop/go-api-ecom/model/web"
-	"project-workshop/go-api-ecom/service"
 	"strconv"
+	"survey/helper"
+	"survey/model/web"
+	"survey/service"
 
 	"github.com/julienschmidt/httprouter"
 )

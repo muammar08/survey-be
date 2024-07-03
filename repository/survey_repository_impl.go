@@ -4,8 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"project-workshop/go-api-ecom/helper"
-	"project-workshop/go-api-ecom/model/domain"
+	"survey/helper"
+	"survey/model/domain"
 	"time"
 )
 

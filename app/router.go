@@ -2,9 +2,9 @@ package app
 
 import (
 	// "net/http"
-	"project-workshop/go-api-ecom/controller"
-	"project-workshop/go-api-ecom/exception"
-	"project-workshop/go-api-ecom/middleware"
+	"survey/controller"
+	"survey/exception"
+	"survey/middleware"
 
 	"github.com/julienschmidt/httprouter"
 )

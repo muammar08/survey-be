@@ -2,8 +2,8 @@ package exception
 
 import (
 	"net/http"
-	"project-workshop/go-api-ecom/helper"
-	"project-workshop/go-api-ecom/model/web"
+	"survey/helper"
+	"survey/model/web"
 
 	"github.com/go-playground/validator/v10"
 )

@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"project-workshop/go-api-ecom/app"
-	"project-workshop/go-api-ecom/controller"
-	"project-workshop/go-api-ecom/helper"
-	"project-workshop/go-api-ecom/repository"
-	"project-workshop/go-api-ecom/service"
+	"survey/app"
+	"survey/controller"
+	"survey/helper"
+	"survey/repository"
+	"survey/service"
 
 	"github.com/go-playground/validator/v10"
 	_ "github.com/go-sql-driver/mysql"

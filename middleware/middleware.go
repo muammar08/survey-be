@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	"project-workshop/go-api-ecom/helper"
-	"project-workshop/go-api-ecom/model/web"
+	"survey/helper"
+	"survey/model/web"
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/julienschmidt/httprouter"

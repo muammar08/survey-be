@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"project-workshop/go-api-ecom/helper"
-	"project-workshop/go-api-ecom/model/domain"
+	"survey/helper"
+	"survey/model/domain"
 )
 
 type UserRepositoryImpl struct {

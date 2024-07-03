@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"project-workshop/go-api-ecom/model/domain"
+	"survey/model/domain"
 )
 
 type SurveyRepository interface {

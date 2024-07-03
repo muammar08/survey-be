@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"project-workshop/go-api-ecom/model/web"
+	"survey/model/web"
 )
 
 type SurveyService interface {

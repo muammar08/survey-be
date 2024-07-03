@@ -2,7 +2,7 @@ package app
 
 import (
 	"database/sql"
-	"project-workshop/go-api-ecom/helper"
+	"survey/helper"
 	"time"
 )
 

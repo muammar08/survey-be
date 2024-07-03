@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"time"
 
-	"project-workshop/go-api-ecom/helper"
-	"project-workshop/go-api-ecom/model/domain"
-	"project-workshop/go-api-ecom/model/web"
-	"project-workshop/go-api-ecom/repository"
+	"survey/helper"
+	"survey/model/domain"
+	"survey/model/web"
+	"survey/repository"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v4"
