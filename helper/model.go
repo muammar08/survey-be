@@ -23,6 +23,7 @@ func ToSurveyResponse(survey domain.Survey) web.SurveyResponse {
 		Title:          survey.Title,
 		TanggalPosting: survey.TanggalPosting,
 		BatasPosting:   survey.BatasPosting,
+		Role:           survey.Role,
 		Created_at:     survey.Created_at,
 		Updated_at:     survey.Updated_at,
 	}

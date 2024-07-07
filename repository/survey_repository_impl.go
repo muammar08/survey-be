@@ -17,8 +17,8 @@ func NewSurveyRepository() SurveyRepository {
 }
 
 func (repository *SurveyRepositoryImpl) AddSurvey(ctx context.Context, tx *sql.Tx, survey domain.Survey) domain.Survey {
-	SQL := "INSERT INTO surveys(title, tanggal_posting, batas_posting, created_at, updated_at) VALUES (?, ?, ?, ?, ?)"
-	result, err := tx.ExecContext(ctx, SQL, survey.Title, survey.TanggalPosting, survey.BatasPosting, survey.Created_at, survey.Updated_at)
+	SQL := "INSERT INTO surveys(title, tanggal_posting, batas_posting, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)"
+	result, err := tx.ExecContext(ctx, SQL, survey.Title, survey.TanggalPosting, survey.BatasPosting, survey.Role, survey.Created_at, survey.Updated_at)
 	helper.PanicIfError(err)
 
 	id, err := result.LastInsertId()
@@ -30,8 +30,8 @@ func (repository *SurveyRepositoryImpl) AddSurvey(ctx context.Context, tx *sql.T
 }
 
 func (repository *SurveyRepositoryImpl) UpdateSurvey(ctx context.Context, tx *sql.Tx, survey domain.Survey) domain.Survey {
-	SQL := "UPDATE surveys SET title = ?, tanggal_posting = ?, batas_posting = ?, updated_at = ? WHERE id = ?"
-	_, err := tx.ExecContext(ctx, SQL, survey.Title, survey.TanggalPosting, survey.BatasPosting, survey.Updated_at, survey.Id)
+	SQL := "UPDATE surveys SET title = ?, tanggal_posting = ?, batas_posting = ?, role = ?, updated_at = ? WHERE id = ?"
+	_, err := tx.ExecContext(ctx, SQL, survey.Title, survey.TanggalPosting, survey.BatasPosting, survey.Role, survey.Updated_at, survey.Id)
 	helper.PanicIfError(err)
 
 	return survey
@@ -52,7 +52,7 @@ func (repository *SurveyRepositoryImpl) ShowSurvey(ctx context.Context, tx *sql.
 
 	var createdAt, updatedAt []uint8
 
-	err := rows.Scan(&survey.Id, &survey.Title, &survey.TanggalPosting, &survey.BatasPosting, &createdAt, &updatedAt)
+	err := rows.Scan(&survey.Id, &survey.Title, &survey.TanggalPosting, &survey.BatasPosting, &survey.Role, &createdAt, &updatedAt)
 	if err != nil {
 		return domain.Survey{}, err
 	}
@@ -86,7 +86,7 @@ func (repository *SurveyRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx) 
 	for rows.Next() {
 		var survey domain.Survey
 		var createdAt, updatedAt string
-		err := rows.Scan(&survey.Id, &survey.Title, &survey.TanggalPosting, &survey.BatasPosting, &createdAt, &updatedAt)
+		err := rows.Scan(&survey.Id, &survey.Title, &survey.TanggalPosting, &survey.BatasPosting, &survey.Role, &createdAt, &updatedAt)
 		if err != nil {
 			fmt.Println("Error scanning row:", err)
 			return []domain.Survey{}

@@ -7,6 +7,7 @@ type Survey struct {
 	Title          string
 	TanggalPosting string
 	BatasPosting   string
+	Role           string
 	Created_at     time.Time
 	Updated_at     time.Time
 }

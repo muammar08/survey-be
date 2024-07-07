@@ -39,6 +39,7 @@ func (service *SurveyServiceImpl) AddSurvey(ctx context.Context, request web.Sur
 		Title:          request.Title,
 		TanggalPosting: request.TanggalPosting,
 		BatasPosting:   request.BatasPosting,
+		Role:           request.Role,
 		Created_at:     time.Now(),
 		Updated_at:     time.Now(),
 	}
@@ -65,6 +66,7 @@ func (service *SurveyServiceImpl) UpdateSurvey(ctx context.Context, request web.
 	survey.Title = request.Title
 	survey.TanggalPosting = request.TanggalPosting
 	survey.BatasPosting = request.BatasPosting
+	survey.Role = request.Role
 	survey.Updated_at = time.Now()
 
 	survey = service.SurveyRepository.UpdateSurvey(ctx, tx, survey)
