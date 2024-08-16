@@ -8,4 +8,10 @@ type UserResponse struct {
 	Password string  `json:"password"`
 	Role     string  `json:"role"`
 	Token    string  `json:"token"`
+	Error    string  `json:"error"`
+}
+
+type LoginResponse struct {
+	Email string `json:"email"`
+	Token string `json:"token"`
 }

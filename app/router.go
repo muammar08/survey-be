@@ -45,6 +45,11 @@ func NewRouter(
 	router.POST("/api/answer", authMiddleware.ApplyMiddleware(answerController.AddAnswer))
 	router.DELETE("/api/answer/:answerId", authMiddleware.ApplyMiddleware(surveyController.DeleteSurvey))
 
+	//Reset Password
+	router.POST("/api/users/send-reset", userController.SendResetPassword)
+	router.POST("/api/users/verify-reset-password", userController.VerifyResetPassword)
+	router.POST("/api/users/reset-password", authMiddleware.ApplyMiddleware(userController.ResetPassword))
+
 	router.PanicHandler = exception.ErrorHandler
 
 	return router

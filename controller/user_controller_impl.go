@@ -82,3 +82,46 @@ func (controller *UserControllerImpl) LoginPublic(writer http.ResponseWriter, re
 
 	helper.WriteToResponseBody(writer, webResponse)
 }
+
+func (controller *UserControllerImpl) SendResetPassword(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	forgotPasswordRequest := web.ForgotPasswordRequest{}
+	helper.ReadFromRequestBody(request, &forgotPasswordRequest)
+
+	userResponse := controller.UserService.SendResetPassword(request.Context(), forgotPasswordRequest)
+	webResponse := web.WebResponse{
+		Code:   200,
+		Status: "OK",
+		Data:   userResponse,
+	}
+
+	helper.WriteToResponseBody(writer, webResponse)
+}
+
+func (controller *UserControllerImpl) VerifyResetPassword(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	resetPasswordRequest := web.ResetPasswordRequest{}
+	helper.ReadFromRequestBody(request, &resetPasswordRequest)
+
+	userResponse := controller.UserService.VerifyResetPassword(request.Context(), resetPasswordRequest)
+	webResponse := web.WebResponse{
+		Code:   200,
+		Status: "OK",
+		Data:   userResponse,
+	}
+
+	helper.WriteToResponseBody(writer, webResponse)
+}
+
+func (controller *UserControllerImpl) ResetPassword(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	changePasswordRequest := web.ChangePasswordRequest{}
+	userId := request.Context().Value("userId").(int)
+	helper.ReadFromRequestBody(request, &changePasswordRequest)
+
+	userResponse := controller.UserService.ResetPassword(request.Context(), changePasswordRequest, userId)
+	webResponse := web.WebResponse{
+		Code:   200,
+		Status: "OK",
+		Data:   userResponse,
+	}
+
+	helper.WriteToResponseBody(writer, webResponse)
+}

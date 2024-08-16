@@ -14,4 +14,8 @@ type UserRepository interface {
 	FindByUsername(ctx context.Context, tx *sql.Tx, nim string, email string) (domain.User, error)
 	FindByUsernamePublic(ctx context.Context, tx *sql.Tx, email string) (domain.User, error)
 	FindByRole(ctx context.Context, tx *sql.Tx, role bool) (domain.User, error)
+	InsertResetPassword(ctx context.Context, tx *sql.Tx, token domain.ResetPassword) (domain.ResetPassword, error)
+	FindByToken(ctx context.Context, tx *sql.Tx, token string) (domain.ResetPassword, error)
+	DeletedByUserId(ctx context.Context, tx *sql.Tx, userId int) (domain.User, error)
+	UpdatePassword(ctx context.Context, tx *sql.Tx, user domain.User) (domain.User, error)
 }
