@@ -95,7 +95,7 @@ func (repository *QuestionRepositoryImpl) UpdateQuestion(ctx context.Context, tx
 	var updateQuestion []domain.Question
 
 	for _, question := range questions {
-		_, err := tx.ExecContext(ctx, SQL, question.Question, question.Updated_at, question.Id)
+		_, err := tx.ExecContext(ctx, SQL, question.Question, question.Type, question.Updated_at, question.Id)
 		if err != nil {
 			fmt.Println("err", err)
 		}
